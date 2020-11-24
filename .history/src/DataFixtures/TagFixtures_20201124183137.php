@@ -15,16 +15,16 @@ class TagFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         $collectionTags = [
-            ['symfony', "some text describ this libelle"],
-            ['laravel', "another text describ this libelle"],
-            ['mysql', "mysql text describ this libelle"],
-            ['firebase', "firebose some text describ this libelle"],
-            ['php', "php some text describ this libelle"]
+            'symfony',
+            'laravel',
+            'mysql',
+            'firebase',
+            'php'
         ];
         foreach ($collectionTags as $collectionTag) {
             $tag = new Tag();
             $tag
-                ->setLibelle($collectionTags)
+                ->setLibelle($collectionTag)
                 ->setDescription($faker->sentence(6, true));
             $manager->persist($tag);
             $manager->flush();
