@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LevelRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -37,17 +36,15 @@ class Level
     private $norme;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="levels")
+     * @ORM\ManyToOne(targetEntity=Competence::class, inversedBy="levels")
      */
     private $competence;
-
 
 
 
     public function __construct()
     {
         $this->competences = new ArrayCollection();
-        $this->competence = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -91,26 +88,14 @@ class Level
         return $this;
     }
 
-    /**
-     * @return Collection|Competence[]
-     */
-    public function getCompetence(): Collection
+    public function getCompetence(): ?Competence
     {
         return $this->competence;
     }
 
-    public function addCompetence(Competence $competence): self
+    public function setCompetence(?Competence $competence): self
     {
-        if (!$this->competence->contains($competence)) {
-            $this->competence[] = $competence;
-        }
-
-        return $this;
-    }
-
-    public function removeCompetence(Competence $competence): self
-    {
-        $this->competence->removeElement($competence);
+        $this->competence = $competence;
 
         return $this;
     }

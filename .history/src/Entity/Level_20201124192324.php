@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
+use App\Repository\LevelRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\LevelRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=LevelRepository::class)
- * @ApiResource()
  */
 class Level
 {
@@ -37,17 +35,13 @@ class Level
     private $norme;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="levels")
+     * @ORM\ManyToMany(targetEntity=Competence::class, mappedBy="level")
      */
-    private $competence;
-
-
-
+    private $competences;
 
     public function __construct()
     {
         $this->competences = new ArrayCollection();
-        $this->competence = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,15 +88,16 @@ class Level
     /**
      * @return Collection|Competence[]
      */
-    public function getCompetence(): Collection
+    public function getCompetences(): Collection
     {
-        return $this->competence;
+        return $this->competences;
     }
 
     public function addCompetence(Competence $competence): self
     {
-        if (!$this->competence->contains($competence)) {
-            $this->competence[] = $competence;
+        if (!$this->competences->contains($competence)) {
+            $this->competences[] = $competence;
+            $competence->addLevel($this);
         }
 
         return $this;
@@ -110,7 +105,9 @@ class Level
 
     public function removeCompetence(Competence $competence): self
     {
-        $this->competence->removeElement($competence);
+        if ($this->competences->removeElement($competence)) {
+            $competence->removeLevel($this);
+        }
 
         return $this;
     }

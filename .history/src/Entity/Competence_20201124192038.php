@@ -3,16 +3,19 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CompetenceRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\GroupeCompetenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass=GroupeCompetenceRepository::class)
- * @ApiResource()
+ * @ORM\Entity(repositoryClass=CompetenceRepository::class)
+ * @ApiResource(
+ * routeprefix="/admin",
+ * 
+ * )
  */
-class GroupeCompetence
+class Competence
 {
     /**
      * @ORM\Id
@@ -27,13 +30,13 @@ class GroupeCompetence
     private $libelle;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="groupecompretence")
+     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, mappedBy="competences")
      */
-    private $competences;
+    private $groupecompretence;
 
     public function __construct()
     {
-        $this->competences = new ArrayCollection();
+        $this->groupecompretence = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -54,28 +57,25 @@ class GroupeCompetence
     }
 
     /**
-     * @return Collection|Competence[]
+     * @return Collection|GroupeCompetence[]
      */
-    public function getCompetences(): Collection
+    public function getGroupecompretence(): Collection
     {
-        return $this->competences;
+        return $this->groupecompretence;
     }
 
-    public function addCompetence(Competence $competence): self
+    public function addGroupecompretence(GroupeCompetence $groupecompretence): self
     {
-        if (!$this->competences->contains($competence)) {
-            $this->competences[] = $competence;
-            $competence->addGroupecompretence($this);
+        if (!$this->groupecompretence->contains($groupecompretence)) {
+            $this->groupecompretence[] = $groupecompretence;
         }
 
         return $this;
     }
 
-    public function removeCompetence(Competence $competence): self
+    public function removeGroupecompretence(GroupeCompetence $groupecompretence): self
     {
-        if ($this->competences->removeElement($competence)) {
-            $competence->removeGroupecompretence($this);
-        }
+        $this->groupecompretence->removeElement($groupecompretence);
 
         return $this;
     }

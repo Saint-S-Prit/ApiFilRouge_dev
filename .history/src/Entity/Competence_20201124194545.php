@@ -30,16 +30,14 @@ class Competence
     private $libelle;
 
     /**
-     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, mappedBy="competences")
+     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="competences")
      */
     private $groupecompretence;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Level::class, mappedBy="competence")
+     * @ORM\OneToMany(targetEntity=Level::class, mappedBy="competence")
      */
     private $levels;
-
-
 
 
     public function __construct()
@@ -102,7 +100,7 @@ class Competence
     {
         if (!$this->levels->contains($level)) {
             $this->levels[] = $level;
-            $level->addCompetence($this);
+            $level->setCompetence($this);
         }
 
         return $this;
@@ -111,7 +109,10 @@ class Competence
     public function removeLevel(Level $level): self
     {
         if ($this->levels->removeElement($level)) {
-            $level->removeCompetence($this);
+            // set the owning side to null (unless already changed)
+            if ($level->getCompetence() === $this) {
+                $level->setCompetence(null);
+            }
         }
 
         return $this;

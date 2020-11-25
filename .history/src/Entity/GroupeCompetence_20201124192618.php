@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=GroupeCompetenceRepository::class)
- * @ApiResource()
  */
 class GroupeCompetence
 {

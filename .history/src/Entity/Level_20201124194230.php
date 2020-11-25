@@ -3,16 +3,16 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\LevelRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\GroupeCompetenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * @ORM\Entity(repositoryClass=GroupeCompetenceRepository::class)
+ * @ORM\Entity(repositoryClass=LevelRepository::class)
  * @ApiResource()
  */
-class GroupeCompetence
+class Level
 {
     /**
      * @ORM\Id
@@ -24,12 +24,19 @@ class GroupeCompetence
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $libelle;
+    private $number;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="groupecompretence")
+     * @ORM\Column(type="text")
      */
-    private $competences;
+    private $description;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $norme;
+
+
 
     public function __construct()
     {
@@ -41,14 +48,38 @@ class GroupeCompetence
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    public function getNumber(): ?string
     {
-        return $this->libelle;
+        return $this->number;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setNumber(string $number): self
     {
-        $this->libelle = $libelle;
+        $this->number = $number;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getNorme(): ?string
+    {
+        return $this->norme;
+    }
+
+    public function setNorme(string $norme): self
+    {
+        $this->norme = $norme;
 
         return $this;
     }
@@ -65,7 +96,7 @@ class GroupeCompetence
     {
         if (!$this->competences->contains($competence)) {
             $this->competences[] = $competence;
-            $competence->addGroupecompretence($this);
+            $competence->addLevel($this);
         }
 
         return $this;
@@ -74,7 +105,7 @@ class GroupeCompetence
     public function removeCompetence(Competence $competence): self
     {
         if ($this->competences->removeElement($competence)) {
-            $competence->removeGroupecompretence($this);
+            $competence->removeLevel($this);
         }
 
         return $this;

@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass=GroupeCompetenceRepository::class)
- * @ApiResource()
  */
 class GroupeCompetence
 {
@@ -18,6 +17,7 @@ class GroupeCompetence
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @ApiResource()
      */
     private $id;
 

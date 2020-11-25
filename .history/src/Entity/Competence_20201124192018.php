@@ -2,17 +2,16 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CompetenceRepository;
-use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CompetenceRepository::class)
- * attributes={"security"="is_granted('ROLE_ADMIN')", "security_message"="Only admins can access."}
  * @ApiResource(
- * routePrefix="/admin",
+ * routeprefix="/admin",
+ * 
  * )
  */
 class Competence
@@ -34,19 +33,9 @@ class Competence
      */
     private $groupecompretence;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Level::class, mappedBy="competence")
-     */
-    private $levels;
-
-
-
-
     public function __construct()
     {
         $this->groupecompretence = new ArrayCollection();
-        $this->level = new ArrayCollection();
-        $this->levels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,33 +75,6 @@ class Competence
     public function removeGroupecompretence(GroupeCompetence $groupecompretence): self
     {
         $this->groupecompretence->removeElement($groupecompretence);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Level[]
-     */
-    public function getLevels(): Collection
-    {
-        return $this->levels;
-    }
-
-    public function addLevel(Level $level): self
-    {
-        if (!$this->levels->contains($level)) {
-            $this->levels[] = $level;
-            $level->addCompetence($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLevel(Level $level): self
-    {
-        if ($this->levels->removeElement($level)) {
-            $level->removeCompetence($this);
-        }
 
         return $this;
     }

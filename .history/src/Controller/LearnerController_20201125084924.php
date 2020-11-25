@@ -8,19 +8,20 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class UserController extends AbstractController
+class LearnerController extends AbstractController
 {
     /**
      * @Route(
-     *     path={"/api/admin/learners"},
+     *     path={"/api/admin/Learner"},
      *     methods={"POST"},
      * )
      */
+
     public function addUser(Request $request)
     {
-        $user = $this->userSrv->addUserSrv($request, "App\Entity\Learner", "LEARNER");
-        $this->manager->persist($user);
+        $learner = $this->userSrv->addUserService($request, "App\Entity\Learner", "LEARNER");
+        $this->manager->persist($learner);
         $this->manager->flush();
-        return new JsonResponse('Un apprenant a été crée.', Response::HTTP_OK, [], true);
+        return new JsonResponse('CM create.', Response::HTTP_OK, [], true);
     }
 }
